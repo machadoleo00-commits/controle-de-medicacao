@@ -1,0 +1,10 @@
+<body>
+    <div class="container-fluid">
+      
+        <ul>
+          <li><a href="{{ url_for('index') }}" class="nav-link">Medicamentos</a></li>
+          <li><a href="{{ url_for('add') }}" class="nav-link">Adicionar Medicamento</a></li>
+        </ul>
+        {% block main %}{% endblock %}
+    </div>
+</body>

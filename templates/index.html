@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Controle de Medicação</title>
+    <style>
+        th, td {
+            padding: 8px 16px;
+            text-align: left;
+            border-bottom: 1px solid #ccc;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+    </style>
+</head>
+
+{% extends "base.html" %}
+{% block main %}
+<table>
+    <thead>
+        <tr>
+            <th>Medicamento</th>
+            <th>Doses por dia</th>
+            <th>Próxima dose em</th>
+            <th>Fim do tratamento em</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for m in medicamentos %}
+        <tr>
+            <td>{{ m.medicamento }}</td>
+            <td>{{ m.posologia }}</td>
+            {% if m.proxima_dose %}
+            <td>{{ m.proxima_dose }}</td>
+            {% else %}
+            <td>Horário não definido</td>
+            {% endif %}
+            {% if m.final_do_tratamento %}
+            <td>{{ m.final_do_tratamento }}</td>
+            {% else %}
+            <td>tratamento finalizado</td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

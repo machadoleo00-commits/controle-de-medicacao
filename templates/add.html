@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+<h1>Adicionar Medicamento</h1>
+
+<form method = "POST" action = "{{ url_for('add') }}">
+    <div>
+        <label for="medicamento">Medicamento:</label>
+        <input type="text" id="medicamento" name="medicamento" required>
+    </div>
+        
+    <div>
+        <label for="posologia">Posologia (numero de tomadas no dia):</label>
+        <input type="number" min='1' id="posologia" name="posologia" required>
+    </div>
+    <div>
+        <label for="tempo">dias de tratamento:</label>
+        <input type="number" min ='1' id="tempo" name="tempo" required>
+    </div>  
+    <button type="submit">Adicionar</button>
+</form>
+
+{% endblock %}
