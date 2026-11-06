@@ -1,5 +1,6 @@
 # 💊 Controle de Medicação
-![Tela inicial do app](Docs/tabela.png)
+
+![Tela inicial do app](docs/tabela.png)
 
 Aplicação web simples para cadastrar medicamentos de um tratamento e acompanhar, em uma tabela, **quanto tempo falta para a próxima dose** e **quanto tempo falta para o fim do tratamento**.
 
@@ -16,7 +17,7 @@ Projeto feito em Python com Flask e SQLite, como parte dos meus estudos de desen
 - [Como executar](#-como-executar)
 - [Banco de dados](#-banco-de-dados)
 - [Rotas](#-rotas)
-- [Limitações conhecidas](#-limitações-conhecidas)
+- [Limitações conhecidas](#%EF%B8%8F-limitações-conhecidas)
 - [Próximos passos](#-próximos-passos)
 - [Autor](#-autor)
 
@@ -59,7 +60,7 @@ O banco guarda a data de início do tratamento, e todos os tempos são calculado
 ## 📁 Estrutura do projeto
 
 ```
-medicamento/
+controle-de-medicacao/
 ├── app.py              # Aplicação Flask: rotas
 ├── database.py         # Acesso ao banco SQLite (criação da tabela e consultas)
 ├── funcoes.py          # Regras de negócio: cálculo de doses e formatação de tempo
@@ -67,6 +68,8 @@ medicamento/
 │   ├── base.html       # Layout comum (menu e estilos)
 │   ├── index.html      # Lista de medicamentos
 │   └── add.html        # Formulário de cadastro
+├── docs/
+│   └── tabela.png      # Captura de tela usada neste README
 ├── requirements.txt    # Dependências do projeto
 ├── .gitignore
 └── README.md
@@ -81,12 +84,12 @@ O arquivo `tratamento.db` é criado automaticamente na primeira execução e nã
 - [Python 3.10 ou superior](https://www.python.org/downloads/)
 - [Git](https://git-scm.com/)
 
-### Passo a passo (Windows, PowerShell)
+### Windows (PowerShell)
 
 ```powershell
 # 1. Clonar o repositório
-git clone https://github.com/seu-usuario/controle-medicacao.git
-cd controle-medicacao
+git clone https://github.com/machadoleo00-commits/controle-de-medicacao.git
+cd controle-de-medicacao
 
 # 2. (Opcional, recomendado) Criar e ativar um ambiente virtual
 python -m venv .venv
@@ -99,18 +102,22 @@ pip install -r requirements.txt
 python app.py
 ```
 
+> Se o PowerShell bloquear a ativação do ambiente virtual, rode `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` e tente de novo. Esse passo é opcional: o app também roda sem ambiente virtual.
+
 ### Linux ou macOS
 
 ```bash
-git clone https://github.com/seu-usuario/controle-medicacao.git
-cd controle-medicacao
+git clone https://github.com/machadoleo00-commits/controle-de-medicacao.git
+cd controle-de-medicacao
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 python app.py
 ```
 
-Depois, abra no navegador: **http://127.0.0.1:5000**
+### Acessar
+
+Com o servidor rodando, abra no navegador: **http://127.0.0.1:5000**
 
 Para parar o servidor, use `Ctrl + C` no terminal.
 
@@ -159,6 +166,7 @@ A tabela é criada automaticamente quando o `database.py` é importado.
 
 **Leonardo Machado de Souza**
 
+- GitHub: [machadoleo00-commits](https://github.com/machadoleo00-commits)
 - LinkedIn: [leonardo-machado-de-souza](https://www.linkedin.com/in/leonardo-machado-de-souza-823953341/)
 
 ---
