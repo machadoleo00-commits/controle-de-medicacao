@@ -1,5 +1,5 @@
 # 💊 Controle de Medicação
-![Tela inicial do app](docs/tabela.png)
+![Tela inicial do app](Docs/tabela.png)
 
 Aplicação web simples para cadastrar medicamentos de um tratamento e acompanhar, em uma tabela, **quanto tempo falta para a próxima dose** e **quanto tempo falta para o fim do tratamento**.
 
