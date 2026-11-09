@@ -36,6 +36,7 @@ def formatar_duracao(duracao):
 def resumo_tratamento():
     resultado = []
     for linha in listar_medicamentos():
+        id = linha[0]
         nome = linha[1]
         posologia = linha[2]
         proxima_data = proxima_dose(nome)
@@ -50,7 +51,7 @@ def resumo_tratamento():
         else: 
             final = str(final).split('.')[0]
         final = formatar_duracao(final)
-        resultado.append({'medicamento': nome, 'posologia': posologia, 'proxima_dose': proxima, 'final_do_tratamento': final})
+        resultado.append({'medicamento': nome, 'posologia': posologia, 'proxima_dose': proxima, 'final_do_tratamento': final, 'id': id})
     return resultado
 
             

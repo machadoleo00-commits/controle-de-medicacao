@@ -25,6 +25,7 @@
             <th>Doses por dia</th>
             <th>Próxima dose em</th>
             <th>Fim do tratamento em</th>
+            <th>Ações</th>
         </tr>
     </thead>
     <tbody>
@@ -42,6 +43,11 @@
             {% else %}
             <td>tratamento finalizado</td>
             {% endif %}
+            <td>
+            <form method="POST" action="{{ url_for('excluir', id=m.id) }}">
+            <button type="submit">Excluir</button>
+            </form>
+            </td>
         </tr>
         {% endfor %}
     </tbody>

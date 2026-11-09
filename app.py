@@ -20,6 +20,10 @@ def add():
         return redirect(url_for('index'))
     return render_template('add.html')
 
+@app.route('/excluir/<int:id>', methods =['POST'])
+def excluir(id):
+    database.deletar_medicamento(id)
+    return redirect(url_for('index'))
 
 if __name__ == '__main__':
     app.run(debug=True)
