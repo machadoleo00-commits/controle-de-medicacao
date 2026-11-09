@@ -1,23 +1,15 @@
+{% extends "base.html" %}
+{% block main %}
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <title>Controle de Medicação</title>
-    <style>
-        th, td {
-            padding: 8px 16px;
-            text-align: left;
-            border-bottom: 1px solid #ccc;
-        }
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-    </style>
+
 </head>
 
-{% extends "base.html" %}
-{% block main %}
+
+
 <table>
     <thead>
         <tr>
@@ -45,8 +37,8 @@
             {% endif %}
             <td>
             <form method="POST" action="{{ url_for('excluir', id=m.id) }}">
-            <button type="submit">Excluir</button>
-            </form>
+            <button type="submit"class = 'botao'>Excluir</button>
+            <a href="{{ url_for('editar', id=m.id) }}"class = 'botao'>Editar</a>
             </td>
         </tr>
         {% endfor %}

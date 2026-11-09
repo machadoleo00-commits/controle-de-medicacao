@@ -25,5 +25,16 @@ def excluir(id):
     database.deletar_medicamento(id)
     return redirect(url_for('index'))
 
+@app.route('/editar/<int:id>', methods=['GET', 'POST'])
+def editar(id):
+    medicamento = database.listar_medicamento_por_id(id)
+    if request.method == 'POST':
+        nome = request.form['medicamento']
+        posologia = int(request.form['posologia'])
+        tempo = int(request.form['tempo'])
+        database.atualizar_medicamento(id, nome, posologia, tempo)
+        return redirect(url_for('index'))
+    return render_template('editar.html', medicamento=medicamento)
+
 if __name__ == '__main__':
     app.run(debug=True)
