@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, url_for
+from flask import Flask, request, render_template, redirect, url_for, abort
 import database
 from funcoes import *
 
@@ -28,6 +28,8 @@ def excluir(id):
 @app.route('/editar/<int:id>', methods=['GET', 'POST'])
 def editar(id):
     medicamento = database.listar_medicamento_por_id(id)
+    if not medicamento:
+        abort(404)
     if request.method == 'POST':
         nome = request.form['medicamento']
         posologia = int(request.form['posologia'])

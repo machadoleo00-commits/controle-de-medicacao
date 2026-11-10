@@ -2,7 +2,7 @@
 
 ![Tela inicial do app](docs/tabela.png)
 
-Aplicação web simples para cadastrar medicamentos de um tratamento e acompanhar, em uma tabela, **quanto tempo falta para a próxima dose** e **quanto tempo falta para o fim do tratamento**.
+Aplicação web simples para cadastrar medicamentos de um tratamento e acompanhar, em uma tabela, **quanto tempo falta para a próxima dose** e **quanto tempo falta para o fim do tratamento**. Também permite **editar** e **excluir** medicamentos cadastrados.
 
 Projeto feito em Python com Flask e SQLite, como parte dos meus estudos de desenvolvimento de software. Tem foco em aprender conceitos de back-end: rotas, formulários, persistência em banco de dados, templates e cálculo com datas.
 
@@ -25,15 +25,19 @@ Projeto feito em Python com Flask e SQLite, como parte dos meus estudos de desen
 
 ## ✅ Funcionalidades
 
-- Cadastro de medicamento com **nome**, **doses por dia** (posologia) e **duração do tratamento em dias**.
+- **Cadastro** de medicamento com nome, doses por dia (posologia) e duração do tratamento em dias.
 - Registro automático da **data e hora de início** do tratamento no momento do cadastro.
-- Listagem de todos os medicamentos em uma tabela com:
+- **Listagem** de todos os medicamentos em uma tabela com:
   - nome do medicamento;
   - doses por dia;
   - tempo restante até a próxima dose;
-  - tempo restante até o fim do tratamento.
-- Tratamento já concluído identificado na tabela, sem mostrar tempos negativos.
+  - tempo restante até o fim do tratamento;
+  - botões de ação (editar e excluir).
+- **Edição** de um medicamento, com o formulário já preenchido com os valores atuais. A data de início é preservada, então mudar as doses ou a duração recalcula os tempos sem reiniciar o tratamento.
+- **Exclusão** de um medicamento por requisição `POST`, evitando que um simples acesso a um link apague dados.
+- Tratamento encerrado e ausência de novas doses identificados na tabela, sem mostrar tempos negativos.
 - Durações exibidas em português, sem microssegundos (por exemplo, `3 dias, 19:15:12`).
+- Erro 404 ao tentar editar um medicamento que não existe.
 - Validação básica no formulário: campos obrigatórios e valores numéricos mínimos.
 
 ## 🛠 Tecnologias
@@ -42,9 +46,9 @@ Projeto feito em Python com Flask e SQLite, como parte dos meus estudos de desen
 |---|---|
 | Python 3 | Linguagem principal |
 | Flask | Servidor web, rotas e templates |
-| Jinja2 | Templates HTML (já incluso no Flask) |
+| Jinja2 | Templates HTML com herança, laços e condicionais (já incluso no Flask) |
 | SQLite (`sqlite3`) | Banco de dados local, já incluso no Python |
-| HTML e CSS | Interface |
+| HTML e CSS | Interface, com CSS em arquivo estático |
 
 ## 🧮 Como funciona o cálculo das doses
 
@@ -54,8 +58,8 @@ O banco guarda a data de início do tratamento, e todos os tempos são calculado
 - **Primeira dose** = início do tratamento + um intervalo.
 - **Próxima dose** = primeira dose cujo horário ainda não passou, somando o intervalo dose a dose.
 - **Fim do tratamento** = início + duração em dias.
-- Se a próxima dose cairia depois do fim do tratamento, não há mais doses (a tabela mostra um traço).
-- Se o fim já passou, a tabela mostra **Tratamento concluído**.
+- Se a próxima dose cairia depois do fim do tratamento, não há mais doses e a tabela mostra **Horário não definido**.
+- Se o fim já passou, a tabela mostra **tratamento finalizado**.
 
 ## 📁 Estrutura do projeto
 
@@ -64,10 +68,13 @@ controle-de-medicacao/
 ├── app.py              # Aplicação Flask: rotas
 ├── database.py         # Acesso ao banco SQLite (criação da tabela e consultas)
 ├── funcoes.py          # Regras de negócio: cálculo de doses e formatação de tempo
+├── static/
+│   └── styles.css      # Estilos da interface
 ├── templates/
-│   ├── base.html       # Layout comum (menu e estilos)
+│   ├── base.html       # Layout comum (menu e link para o CSS)
 │   ├── index.html      # Lista de medicamentos
-│   └── add.html        # Formulário de cadastro
+│   ├── add.html        # Formulário de cadastro
+│   └── editar.html     # Formulário de edição
 ├── docs/
 │   └── tabela.png      # Captura de tela usada neste README
 ├── requirements.txt    # Dependências do projeto
@@ -144,19 +151,26 @@ A tabela é criada automaticamente quando o `database.py` é importado.
 | GET | `/` | Lista os medicamentos com o tempo até a próxima dose e o fim do tratamento |
 | GET | `/add` | Exibe o formulário de cadastro |
 | POST | `/add` | Recebe o formulário, grava no banco e redireciona para `/` |
+| GET | `/editar/<id>` | Exibe o formulário de edição preenchido (404 se o `id` não existir) |
+| POST | `/editar/<id>` | Atualiza o medicamento e redireciona para `/` |
+| POST | `/excluir/<id>` | Exclui o medicamento e redireciona para `/` |
 
 ## ⚠️ Limitações conhecidas
 
 - Os cálculos buscam o medicamento pelo **nome**. Dois medicamentos com o mesmo nome podem se confundir. A solução planejada é trocar a busca pelo `id`.
 - A primeira dose é considerada **um intervalo após o cadastro**, e não um horário escolhido pelo usuário.
 - Os tempos são calculados quando a página carrega. Para atualizar, é preciso recarregar a página.
+- A exclusão é imediata, sem tela de confirmação.
 - Ainda não há autenticação: o app foi pensado para uso local e individual.
 
 ## 🗺 Próximos passos
 
-- [ ] Editar medicamentos cadastrados
-- [ ] Excluir medicamentos
+- [x] Cadastro e listagem de medicamentos
+- [x] Cálculo da próxima dose e do fim do tratamento
+- [x] Editar medicamentos cadastrados
+- [x] Excluir medicamentos
 - [ ] Alarme de dose com botão "já tomei" (janela de 10 minutos após o horário, com aviso de atraso até a confirmação)
+- [ ] Confirmação antes de excluir
 - [ ] Escolher o horário da primeira dose no formulário
 - [ ] Buscar medicamentos por `id` em vez de nome
 - [ ] Atualização automática da tabela
