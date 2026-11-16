@@ -24,3 +24,13 @@ table {
             border-collapse: collapse;
             width: 100%;
 }
+.acoes {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.acoes form {
+    margin: 0;
+}

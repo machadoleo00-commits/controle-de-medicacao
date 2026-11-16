@@ -33,6 +33,46 @@ def formatar_duracao(duracao):
     final = duracao.replace('day', 'dia')
     return final
 
+
+
+            
+def ultima_dose_passada(medicamento):
+    inicio = inicio_tratamento(medicamento)
+    fim = fim_tratamento_medicamento(medicamento)
+    intervalo = intervalo_medicamento(medicamento)  
+    tratamento = inicio + datetime.timedelta(hours=intervalo)
+    ultima_dose = None
+    while tratamento <= fim:
+        if tratamento <= datetime.datetime.now():
+            ultima_dose = tratamento
+        else:
+            break
+        tratamento += datetime.timedelta(hours=intervalo)
+    return ultima_dose
+
+def formatar_horario_dose(horario):
+    if horario is None:
+        return None
+    else:
+        return horario.strftime("%Y-%m-%d %H:%M")
+
+    
+def estado_dose(medicamento_id, nome):
+    agora = datetime.datetime.now()
+    ultima= ultima_dose_passada(nome)
+    if fim_tratamento_medicamento(nome) < agora:
+        return "Finalizado"
+    elif ultima is None:
+        return "Aguardando"
+    elif dose_confirmada(medicamento_id, formatar_horario_dose(ultima)):
+        return "Confirmado"
+    else:
+        if agora - ultima > datetime.timedelta(minutes=10):
+            return "Atrasado"
+        else: 
+            return "Hora_de_tomar"
+
+
 def resumo_tratamento():
     resultado = []
     for linha in listar_medicamentos():
@@ -40,6 +80,7 @@ def resumo_tratamento():
         nome = linha[1]
         posologia = linha[2]
         proxima_data = proxima_dose(nome)
+        estado = estado_dose(id, nome)
         if proxima_data:
             proxima = proxima_data - datetime.datetime.now()
             proxima = str(proxima).split('.')[0]
@@ -50,44 +91,6 @@ def resumo_tratamento():
             final = None
         else: 
             final = str(final).split('.')[0]
-        final = formatar_duracao(final)
-        resultado.append({'medicamento': nome, 'posologia': posologia, 'proxima_dose': proxima, 'final_do_tratamento': final, 'id': id})
+            final = formatar_duracao(final)
+        resultado.append({'medicamento': nome, 'posologia': posologia, 'proxima_dose': proxima, 'final_do_tratamento': final, 'id': id, 'estado': estado})
     return resultado
-
-            
-    
-
-
-
-def alarme_medicamento(medicamento):
-    proxima_dose = intervalo_medicamento(medicamento)
-    if not proxima_dose:
-        yield f"Não foi possível determinar o horário da próxima dose do medicamento {medicamento}."
-        return
-    
-    limite = proxima_dose + datetime.timedelta(minutes=10)
-    
-    while True:
-        if tomou.is_set():
-            yield f"Dose do medicamento {medicamento} confirmada."
-            break
-        horario_atual = datetime.datetime.now()
-        if horario_atual >= limite:
-            yield f"Hora de tomar o medicamento {medicamento}!"
-                
-        elif horario_atual < proxima_dose: 
-            yield f"Faltam {proxima_dose - horario_atual} para a próxima dose do medicamento {medicamento}."
-        else:
-            atraso = horario_atual - proxima_dose
-            yield f'voce perdeu a hora de tomar o medicamento {medicamento}! Atraso de {atraso}.'
-        tomou.wait(60)       
-
-def tempo_restante(inicio, tempo):
-    inicio = datetime.datetime.fromisoformat(inicio)
-    fim = inicio + datetime.timedelta(days=tempo)
-    tempo_restante = fim - datetime.datetime.now()
-    if tempo_restante <= datetime.timedelta(days=0):
-        return None
-    else:
-        return tempo_restante
- 

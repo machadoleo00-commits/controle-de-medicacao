@@ -38,5 +38,16 @@ def editar(id):
         return redirect(url_for('index'))
     return render_template('editar.html', medicamento=medicamento)
 
+@app.route('/tomei/<int:id>', methods=['POST'])
+def tomei(id):
+    medicamento = database.listar_medicamento_por_id(id)
+    if not medicamento:
+        abort(404)
+    proximo_horario_dose = ultima_dose_passada(medicamento[1])
+    horario = formatar_horario_dose(proximo_horario_dose)
+    if proximo_horario_dose and not database.dose_confirmada(id, horario):
+        database.registrar_dose(id, horario)
+    return redirect(url_for('index'))
+
 if __name__ == '__main__':
     app.run(debug=True)

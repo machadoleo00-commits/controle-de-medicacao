@@ -12,6 +12,15 @@ cursor.execute("""
         inicio TEXT
     )
 """)
+
+cursor.execute("""
+    CREATE TABLE IF NOT EXISTS doses_tomadas (
+        id INTEGER PRIMARY KEY,
+        medicamento_id INTEGER,
+        horario_previsto TEXT,
+        confirmado_em TEXT
+    )
+""")
 conexao.commit()
 conexao.close()
 
@@ -77,3 +86,18 @@ def listar_inicio_medicamento(medicamento):
     inicio = cursor.fetchone()
     conexao.close()
     return inicio
+
+def registrar_dose(medicamento_id, horario_previsto):
+    conexao = sqlite3.connect('tratamento.db')
+    cursor = conexao.cursor()
+    cursor.execute("INSERT INTO doses_tomadas (medicamento_id, horario_previsto, confirmado_em) VALUES (?, ?, ?)", (medicamento_id, horario_previsto, datetime.datetime.now().strftime("%Y-%m-%d %H:%M")))
+    conexao.commit()
+    conexao.close()
+
+def dose_confirmada(medicamento_id, horario_previsto):
+    conexao = sqlite3.connect('tratamento.db')
+    cursor = conexao.cursor()
+    cursor.execute("SELECT confirmado_em FROM doses_tomadas WHERE medicamento_id = ? AND horario_previsto = ?", (medicamento_id, horario_previsto))
+    confirmado_em = cursor.fetchone()
+    conexao.close()
+    return confirmado_em is not None
