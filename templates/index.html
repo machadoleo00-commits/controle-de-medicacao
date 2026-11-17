@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block head %}
 <meta http-equiv="refresh" content="60">
+<script src="{{ url_for('static', filename='alertas.js') }}" defer></script>
 {% endblock %}
 {% block main %}
 <!DOCTYPE html>
@@ -11,7 +12,7 @@
 
 </head>
 
-
+<button id="ativar-alertas" class="botao">Ativar alertas</button>
 
 <table>
     <thead>
@@ -26,7 +27,7 @@
     </thead>
     <tbody>
         {% for m in medicamentos %}
-        <tr>
+        <tr data-estado="{{ m.estado }}" data-nome="{{ m.medicamento }}">
             <td>{{ m.medicamento }}</td>
             <td>{{ m.posologia }}</td>
             {% if m.proxima_dose %}
